@@ -8,6 +8,9 @@ export namespace SNP {
       [RegExp, number]
     ]
   }
+  export type RuleVector = [number, number][]
+  export type SynapseMatrix = number[][]
+
 }
 
 export enum COMPUTATION {

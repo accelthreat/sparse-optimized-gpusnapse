@@ -3,7 +3,7 @@ import { GPU } from 'gpu.js'
 
 const gpu = new GPU()
 
-export function getConfigGPU (
+export function getConfigGPU(
   c: SNP.Config,
   s: SNP.SpikingVector[],
   m: SNP.SpikingTransitionMatrix,
@@ -42,3 +42,4 @@ export function getConfigGPU (
 
   return result
 }
+
