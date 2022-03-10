@@ -51,21 +51,17 @@ NPi = Neuron rule map vector
 Mk = Transition tuple Mk = (MPi, PPi, NPi)
 */
 
-export function getConfigGPUOptimized(config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
+export function getConfigOptimizedCPU(config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
   let newConfig = [...config]
   for (let i = 0; i < spikingVector.length; i++) {
     let j = spikingVector[i]
     if (j !== -1) {
       let [c, p] = ruleVector[j]
-      // console.log("c: %d, p: %d", c, p)
       newConfig[i] = newConfig[i] - c
-      //console.log("New config of neuron %d after consume: %d", i, newConfig[i])
       let w = 0
-      // console.log("Neuron %d", j)
       while (p > 0 && w < synapseMatrix.length) {
         if (synapseMatrix[w][i] !== PAD) {
           let h = synapseMatrix[w][i]
-          //console.log("%d-%d", i, h)
           newConfig[h] = newConfig[h] + p
         }
         w += 1
@@ -77,4 +73,4 @@ export function getConfigGPUOptimized(config: SNP.Config, spikingVector: SNP.Spi
 
 
 let c = genExampleMatrix()
-let c1 = getConfigGPUOptimized(c.configurationVector, c.spikingVector, c.ruleVector, c.synapseMatrix)
+let c1 = getConfigOptimizedCPU(c.configurationVector, c.spikingVector, c.ruleVector, c.synapseMatrix)

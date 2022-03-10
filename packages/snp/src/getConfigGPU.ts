@@ -43,3 +43,55 @@ export function getConfigGPU(
   return result
 }
 
+const PAD = -1
+
+// export function getConfigGPUOptimized(config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
+//   let newConfig = [...config]
+//   for (let i = 0; i < spikingVector.length; i++) {
+//     let j = spikingVector[i]
+//     if (j !== -1) {
+//       let [c, p] = ruleVector[j]
+//       newConfig[i] = newConfig[i] - c
+//       let w = 0
+//       while (p > 0 && w < synapseMatrix.length) {
+//         if (synapseMatrix[w][i] !== PAD) {
+//           let h = synapseMatrix[w][i]
+//           newConfig[h] = newConfig[h] + p
+//         }
+//         w += 1
+//       }
+//     }
+//   }
+//   return newConfig
+// }
+
+export function getConfigGPUOptimized(config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
+  const getPerNeuronConfig = gpu.createKernel(function (config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
+    let j = spikingVector[this.thread.x]
+      if (j !== -1) {
+        let [c, p] = ruleVector[j]
+        if(this.thread.x === this.thread.y) {
+          return -c
+        } else if (p > 0 && synapseMatrix[this.thread.y][this.thread.x]!== PAD) {
+          return p
+        } else {
+          return 0;
+        }
+    }
+  }).setOutput([config.length, config.length])
+
+  const columnarAdd2 = gpu.createKernel(function (configMatrix: number[][]) {
+    let sum = 0
+    for (let i = 0; i<configMatrix.length; i++) {
+      sum += configMatrix[i][this.thread.x]
+    }
+    return sum;
+  }).setOutput([config.length])
+  
+  const combinePerNeuronConfigs = gpu.combineKernels(getPerNeuronConfig as any, columnarAdd2 as any, function (config: SNP.Config, spikingVector: SNP.SpikingVector, ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix) {
+    return columnarAdd2(getPerNeuronConfig(config, spikingVector, ruleVector, synapseMatrix))
+  })
+
+  const result = combinePerNeuronConfigs(config, spikingVector, ruleVector, synapseMatrix) as number[]
+  return result
+}
