@@ -22,8 +22,8 @@ function App () {
     // log('cpu', () => getConfigCPU(setup.c, spikingVectors, setup.m))
     // log('gpu', () => getConfigGPU(setup.c, spikingVectors, setup.m))
     let c = genExampleMatrix()
-    let c1 = getConfigGPUOptimized(c.configurationVector, c.spikingVector, c.ruleVector, c.synapseMatrix)
-    console.log(c1)
+    //let c1 = getConfigGPUOptimized(c.configurationVector, c.spikingVector, c.ruleVector, c.synapseMatrix)
+    //console.log(c1)
   }, [])
 
   return (
