@@ -3,4 +3,5 @@ export { generateSpikingVectors } from './generateSpikingVectors'
 export { getConfig } from './getConfig'
 export { getConfigGPU } from './getConfigGPU'
 export { getConfigCPU } from './getConfigCPU'
-export { getConfigGPUOptimized, genExampleMatrix, genExampleMatrixSimple, getConfigCPUOptimized, getFinalConfig } from './getConfigGPU'
+export { generateBitonicSortingNetwork} from "./generateBitonicSortingNetwork"
+export {getFinalConfigOptimized} from "./getFinalConfigOptimized"

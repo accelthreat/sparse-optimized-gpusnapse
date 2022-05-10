@@ -1,11 +1,6 @@
+import { generateBitonicSortingNetwork, generateSpikingVectors, getConfigCPU, getConfigGPU, getFinalConfigOptimized } from '@gpusnapse/snp'
 import React, { useEffect } from 'react'
-//import { genMatrix } from '@sparse-optimized-gpusnapse/benchmarks'
-import {
-  getConfigCPU,
-  getConfigGPU,
-  generateSpikingVectors,
-  getConfigGPUOptimized, genExampleMatrix, genExampleMatrixSimple, getConfigCPUOptimized, getFinalConfig
-} from "../../snp/src/index"
+//import { genMatrix } from '@gpusnapse/benchmarks'
 
 //const setup = genMatrix(14)
 
@@ -18,7 +13,7 @@ const log = (name: string, fn: Function) => {
 
 function App () {
   useEffect(() => {
-    //const spikingVectors = generateSpikingVectors(setup.c, setup.rules)
+    // const spikingVectors = generateSpikingVectors(setup.c, setup.rules)
     // log('cpu', () => getConfigCPU(setup.c, spikingVectors, setup.m))
     // log('gpu', () => getConfigGPU(setup.c, spikingVectors, setup.m))
 
@@ -27,7 +22,7 @@ function App () {
     // console.log(cs1)
 
     const logMatrix = async () => {
-      let c = await genExampleMatrix()
+      let c = await generateBitonicSortingNetwork()
       console.log("config start")
       console.log("Configuration Vector: ", c.configurationVector)
       console.log("Rule Vector: ", c.ruleVector)
@@ -36,8 +31,8 @@ function App () {
       console.log("Spiking Vector: ", c.spikingVector)
       console.log("config end")
       
-      log('cpu', () => getFinalConfig(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
-      log('gpu', () => getFinalConfig(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
+      log('cpu', () => getFinalConfigOptimized(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
+      log('gpu', () => getFinalConfigOptimized(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
     }
 
     logMatrix()
