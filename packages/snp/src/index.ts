@@ -1,7 +1,9 @@
 export { COMPUTATION } from './types'
-export { generateSpikingVectors } from './generateSpikingVectors'
+export { generateSpikingVector } from './generateSpikingVector'
 export { getConfig } from './getConfig'
 export { getConfigGPU } from './getConfigGPU'
 export { getConfigCPU } from './getConfigCPU'
-export { generateBitonicSortingNetwork} from "./generateBitonicSortingNetwork"
-export {getFinalConfigOptimized} from "./getFinalConfigOptimized"
+export { generateBitonicSortingNetworkOptimized } from "./generateBitonicSortingNetworkOptimized"
+export { generateBitonicSortingNetwork } from "./generateBitonicSortingNetwork"
+export { getFinalConfig } from "./getFinalConfig"
+export { getFinalConfigOptimized } from "./getFinalConfigOptimized"

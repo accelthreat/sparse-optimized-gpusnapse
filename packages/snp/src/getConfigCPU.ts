@@ -1,34 +1,26 @@
 import { SNP } from './types'
 
-export function getConfigCPU (
-  c: SNP.Config,
-  s: SNP.SpikingVector[],
-  m: SNP.SpikingTransitionMatrix,
-) {
-  return s.map(s_i => getConfig(c, s_i, m))
-}
+export function getConfigCPU(config: SNP.Config, spikingVector: SNP.SpikingVector, spikingTransitionMatrix: SNP.SpikingTransitionMatrix) {
+  let newConfig = [...config]
+  let transitionNetGainVector = Array(config.length).fill(0)
 
-function getConfig (
-  c: SNP.Config,
-  s: SNP.SpikingVector,
-  m: SNP.SpikingTransitionMatrix,
-) {
-  const width = c.length
-  const transition = new Array(m.length)
-  const result = new Float32Array([...c])
+  const temp = new Array(spikingVector.length).fill(0).map(() => new Array(spikingTransitionMatrix.length).fill(0));
 
-  // multiply
-  for (let s_i = 0; s_i < s.length; s_i++) {
-    for (let m_i = 0; m_i < width; m_i++) {
-      transition[s_i * width + m_i] = s[s_i] * m[s_i * width + m_i]
+  for(let s = 0; s<spikingVector.length; s++) {
+    for(let m = 0; m<spikingTransitionMatrix.length; m++) {
+      temp[s][m] += spikingTransitionMatrix[s][m] * spikingVector[s]
     }
   }
 
-  // columnar add
-  for (let t_i = 0; t_i < transition.length; t_i++) {
-    const column = t_i % width
-    result[column] += transition[t_i]
+  for(let x = 0; x<spikingTransitionMatrix.length; x++) {
+    for(let y = 0; y<spikingTransitionMatrix.length; y++) {
+      transitionNetGainVector[x] += temp[y][x]
+    }
   }
 
-  return result
+  for(let x = 0; x<config.length; x++) {
+    newConfig[x] += transitionNetGainVector[x]
+  }
+  
+  return newConfig
 }

@@ -25,5 +25,8 @@ export const genMatrix = (n: number) => {
     ])
   }
 
+  console.log("GenMatrix:")
+  console.log(c)
+  console.log(m)
   return { c, m, rules, }
 }

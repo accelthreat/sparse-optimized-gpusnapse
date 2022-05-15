@@ -1,6 +1,5 @@
 import { PAD } from "./constants";
 import { generateOptimizedSpikingVector } from "./generateOptimizedSpikingVector";
-import { generateSpikingVector } from "./generateSpikingVector";
 import { SNP } from "./types";
 
 function powerOfTwo(x: number) {
@@ -20,13 +19,15 @@ const arrStr_to_arrNum = (arrStr: string[]) => {
     return arrNum;
 }
 
-export const generateBitonicSortingNetwork = async () => {
+
+export const generateBitonicSortingNetworkOptimized = async () => {
     // initialize the vectors needed
     let configurationVector: SNP.Config = []
-    let spikingVector: SNP.SpikingVector = []
+    let ruleVector: SNP.RuleVector = []
     let synapseMatrix: SNP.SynapseMatrix = []
-    const spikingTransitionMatrix: number[][] = []
-    const ruleExpVector: [number, RegExp][] = []
+    let spikingVector: SNP.SpikingVector = []
+    let neuronRuleMapVector: number[] = []
+    let ruleExpVector: RegExp[] = []
 
     let n = prompt("Please enter how many input for bitonic sort (must be power of 2)") as string;
     if (!(powerOfTwo(parseInt(n)))) {
@@ -53,43 +54,36 @@ export const generateBitonicSortingNetwork = async () => {
         temp.map((index: number) => tempArr[index] = index);
         synapseMatrix.push(tempArr)
     }
+    // transpose synapseMatrix to fit CSR format
+    synapseMatrix = transpose(synapseMatrix)
 
+    let lastNeuron = -1;
     // populate rule vector
-    for (let i = 0; i < numOfRules; i++) {
-        spikingTransitionMatrix.push(Array(numOfNeurons))
-    }
-
-    //ruleExpVector = Array(numOfRules)
-
     let indexOfFirstRule = 4 + numOfNeurons
-    for (let i = indexOfFirstRule; i < indexOfFirstRule + numOfRules; i++) {
+    for (let j = indexOfFirstRule; j < indexOfFirstRule + numOfRules; j++) {
+        let tempRule = lines[j].split(' ') as any
 
-        let tempRule = lines[i].split(' ') as any //[ruleNeuronIndex, regex, c, p, d]
-        let ruleNeuronIndex: number = parseInt(tempRule[0])
-        for (let j = 0; j < numOfNeurons; j++) {
-            if (ruleNeuronIndex === j) {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = -parseInt(tempRule[2])
-            } else if (synapseMatrix[ruleNeuronIndex][j] !== -1) {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = parseInt(tempRule[3])
-            } else {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = 0
-            }
+        if (tempRule[0] != lastNeuron) {
+            lastNeuron = tempRule[0]
+            neuronRuleMapVector.push(j - indexOfFirstRule)
         }
-    }
 
-    // console.log("STM1")
-    // console.log(spikingTransitionMatrix)
-    for (let i = indexOfFirstRule; i < indexOfFirstRule + numOfRules; i++) {
-        let tempRule = lines[i].split(' ') as any //[ruleNeuronIndex, regex, c, p, d]
-        let ruleNeuronIndex: number = parseInt(tempRule[0])
         const cusnp_to_js_regex = RegExp(/\d+/, "g")
         const jsExp = tempRule[1].replaceAll(cusnp_to_js_regex, '{$&}')
-        //ruleExpVector[i - indexOfFirstRule] = [ruleNeuronIndex, RegExp("^" + jsExp + "$")]
-       ruleExpVector.push([ruleNeuronIndex, RegExp("^" + jsExp + "$")])
-    }
-    // console.log("STM2")
-    // console.log(spikingTransitionMatrix)
+        ruleExpVector.push(RegExp("^" + jsExp + "$"))
 
-    spikingVector = generateSpikingVector(configurationVector, ruleExpVector)
-    return { configurationVector, ruleExpVector, spikingTransitionMatrix, spikingVector }
+        // remove first 2 elements
+        tempRule.splice(0, 2)
+        // remove last element if delay is not considered
+        tempRule.pop()
+        tempRule = arrStr_to_arrNum(tempRule) as number[]
+        ruleVector.push(tempRule)        // push the rules to the rule vector
+    }
+
+    while (neuronRuleMapVector.length < configurationVector.length) {
+        neuronRuleMapVector.push(ruleExpVector.length)
+    }
+
+    spikingVector = generateOptimizedSpikingVector(configurationVector, neuronRuleMapVector, ruleExpVector)
+    return { configurationVector, ruleExpVector, neuronRuleMapVector, ruleVector, synapseMatrix, spikingVector }
 }
