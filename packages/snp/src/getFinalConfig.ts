@@ -1,6 +1,6 @@
 import { SNP } from "./types";
 import { generateSpikingVector } from "./generateSpikingVector";
-//import { getConfigGPU } from "./getConfigGPU";
+import { getConfigGPU } from "./getConfigGPU";
 import { getConfigCPU } from "./getConfigCPU";
 
 function isComputationNotDone(spikingVector: SNP.SpikingVector) {
@@ -18,9 +18,9 @@ export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number
     let spikingVector: SNP.SpikingVector = generateSpikingVector(config, ruleExpVector)
     let iter = 0;
 
-    while (iter < maxRuns && isComputationNotDone(spikingVector)) {
+    while (iter < 999 && isComputationNotDone(spikingVector)) {
         if (isGPU) {
-            //config = getConfigGPU(config, spikingVector, ruleVector, synapseMatrix)
+            config = getConfigGPU(config, spikingVector, spikingTransitionMatrix)
         } else {
             config = getConfigCPU(config, spikingVector, spikingTransitionMatrix)
         }

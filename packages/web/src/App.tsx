@@ -1,4 +1,4 @@
-import { generateBitonicSortingNetwork, generateBitonicSortingNetworkOptimized, generateSpikingVector, getConfigCPU, getFinalConfig, getFinalConfigOptimized } from '@gpusnapse/snp'
+import { generateBitonicSortingNetwork, generateBitonicSortingNetworkOptimized, generateSpikingVector, getConfigCPU, getConfigGPU, getFinalConfig, getFinalConfigOptimized } from '@gpusnapse/snp'
 import React, { useEffect } from 'react'
 import { genMatrix } from '@gpusnapse/benchmarks/src'
 
@@ -26,8 +26,11 @@ function App () {
       console.log("Spiking Vector: ", c.spikingVector)
       console.log("config end")
       
+
+      log('cpu', () => getConfigCPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
+      log('gpu', () => getConfigGPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
       log('cpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, false))
-      // log('gpu', () => getFinalConfigOptimized(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
+      log('gpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix))
     }
 
     const logMatrixOptimized = async () => {

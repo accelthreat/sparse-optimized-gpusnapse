@@ -12,6 +12,8 @@ export function getConfigCPU(config: SNP.Config, spikingVector: SNP.SpikingVecto
     }
   }
 
+  // console.log("CPUInterMatrix")
+  // console.log(temp)
   for(let x = 0; x<spikingTransitionMatrix.length; x++) {
     for(let y = 0; y<spikingTransitionMatrix.length; y++) {
       transitionNetGainVector[x] += temp[y][x]
