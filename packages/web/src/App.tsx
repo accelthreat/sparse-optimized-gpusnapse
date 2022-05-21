@@ -27,8 +27,8 @@ function App () {
       console.log("config end")
       
 
-      log('cpu', () => getConfigCPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
-      log('gpu', () => getConfigGPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
+    //  log('cpu', () => getConfigCPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
+      //log('gpu', () => getConfigGPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
       log('cpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, false))
       log('gpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix))
     }
@@ -48,6 +48,7 @@ function App () {
     }
 
     logMatrix()
+    //logMatrixOptimized()
   }, [])
 
   return (
