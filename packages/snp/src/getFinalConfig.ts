@@ -1,6 +1,8 @@
 import { SNP } from "./types";
 import { generateSpikingVector } from "./generateSpikingVector";
+import { generateSpikingMatrix } from "./generateSpikingMatrix";
 import { getConfigGPU } from "./getConfigGPU";
+import { getConfigGPU_nd } from "./getConfigGPU_nd";
 import { getConfigCPU } from "./getConfigCPU";
 
 function isComputationNotDone(spikingVector: SNP.SpikingVector) {
@@ -28,4 +30,39 @@ export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number
         iter += 1
     }
     return config
+}
+
+
+export function getFinalConfig_nd(config: SNP.Config, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[],  spikingTransitionMatrix_2D:number[][], isGPU: boolean = true) {
+    let iter = 0, spikingMatrix
+  
+    let Q = []
+    Q.push(config)
+    let start = 0, end = Q.length, nextConfig
+    while(iter < 5){
+      for(let starting = start; starting < end; starting++){
+        config = Q[starting]
+        spikingMatrix = generateSpikingMatrix(config, ruleExpVector)
+        if(isGPU){
+            Q = Q.concat(getConfigGPU_nd(config, spikingMatrix, spikingTransitionMatrix))
+        }else{
+            for(let k = 0; k<spikingMatrix.length; k++){
+              nextConfig = getConfigCPU(config, spikingMatrix[k], spikingTransitionMatrix_2D)
+
+              Q.push(nextConfig)
+            }
+        }
+
+      }
+      start = end
+      end = Q.length
+  
+      iter++
+    }
+  
+    for(let j = start; j<end; j++){
+      console.log("C4: " + Q[j])
+    }
+
+    return Q
 }
