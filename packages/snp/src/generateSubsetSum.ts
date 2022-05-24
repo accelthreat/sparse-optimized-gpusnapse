@@ -103,5 +103,5 @@ export const generateSubsetSum = async () => {
     spikingMatrix = generateSpikingMatrix(configurationVector, ruleExpVector)
     // **
 
-    return { configurationVector, ruleExpVector, spikingTransitionMatrix, spikingTransitionMatrix_2D, spikingMatrix }
+    return { configurationVector, ruleExpVector, spikingTransitionMatrix, spikingMatrix }
 }

@@ -1,7 +1,7 @@
 import { SNP } from './types'
 import { GPU } from 'gpu.js'
 
-const gpu = new GPU({ mode: 'cpu' });
+const gpu = new GPU();
 
 export function getConfigGPU (
   c: SNP.Config,

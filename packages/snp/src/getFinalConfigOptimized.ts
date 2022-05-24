@@ -3,6 +3,7 @@ import { PAD } from './constants'
 import { generateOptimizedSpikingVector } from "./generateOptimizedSpikingVector";
 import { getConfigGPUOptimized } from "./getConfigGPUOptimized";
 import { getConfigCPUOptimized } from "./getConfigCPUOptimized";
+import { generateSpikingMatrix_Sparse } from "./generateSpikingMatrix_Sparse";
 
 function isComputationNotDone(spikingVector: SNP.SpikingVector) {
     for (let i = 0; i < spikingVector.length; i++) {
@@ -29,4 +30,36 @@ export function getFinalConfigOptimized(initialConfig: SNP.Config, neuronRuleMap
         spikingVector = generateOptimizedSpikingVector(config, neuronRuleMapVector, ruleExpVector)
     }
     return config
+}
+
+
+export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVector: number[], ruleExpVector: RegExp[], ruleVector: SNP.RuleVector, synapseMatrix: SNP.SynapseMatrix, isGPU: boolean = true) {
+    
+    let iter = 0, spikingMatrix
+    
+    let Q = []
+    Q.push(config)
+    let start = 0, end = Q.length, nextConfig
+    while(iter < 5){
+        for(let starting = start; starting < end; starting++){
+        config = Q[starting]
+        spikingMatrix = generateSpikingMatrix_Sparse(config, neuronRuleMapVector, ruleExpVector)
+        for(let k = 0; k<spikingMatrix.length; k++){
+            if(isGPU) {
+            nextConfig = getConfigGPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+            } else {
+            nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+            }
+            Q.push(nextConfig)
+        }
+        }
+        start = end
+        end = Q.length
+    
+        iter++
+    }
+    
+    for(let j = start; j<end; j++){
+        console.log("C4: " + Q[j])
+    }
 }

@@ -4,6 +4,7 @@ import { generateSpikingMatrix } from "./generateSpikingMatrix";
 import { getConfigGPU } from "./getConfigGPU";
 import { getConfigGPU_nd } from "./getConfigGPU_nd";
 import { getConfigCPU } from "./getConfigCPU";
+import { getConfigCPU_nd } from "./getConfigCPU_nd";
 
 function isComputationNotDone(spikingVector: SNP.SpikingVector) {
     for (let i = 0; i < spikingVector.length; i++) {
@@ -33,7 +34,7 @@ export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number
 }
 
 
-export function getFinalConfig_nd(config: SNP.Config, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[],  spikingTransitionMatrix_2D:number[][], isGPU: boolean = true) {
+export function getFinalConfig_nd(config: any, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[], isGPU: boolean = true) {
     let iter = 0, spikingMatrix
   
     let Q = []
@@ -47,7 +48,7 @@ export function getFinalConfig_nd(config: SNP.Config, ruleExpVector: [number, Re
             Q = Q.concat(getConfigGPU_nd(config, spikingMatrix, spikingTransitionMatrix))
         }else{
             for(let k = 0; k<spikingMatrix.length; k++){
-              nextConfig = getConfigCPU(config, spikingMatrix[k], spikingTransitionMatrix_2D)
+              nextConfig = getConfigCPU_nd(config, spikingMatrix[k], spikingTransitionMatrix)
 
               Q.push(nextConfig)
             }
