@@ -16,14 +16,14 @@ function isComputationNotDone(spikingVector: SNP.SpikingVector) {
     return false
 }
 
-export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: SNP.SpikingTransitionMatrix, isGPU: boolean = true, maxRuns: number = 100) {
+export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[] = [], spikingTransitionMatrix_2D: SNP.SpikingTransitionMatrix = [], isGPU: boolean = true, maxRuns: number = 100) {
     let config = initialConfig
     let spikingVector: SNP.SpikingVector = generateSpikingVector(config, ruleExpVector)
     let iter = 0;
-
+    
     while (iter < 999 && isComputationNotDone(spikingVector)) {
         if (isGPU) {
-            config = getConfigGPU(config, spikingVector, spikingTransitionMatrix)
+            config = getConfigGPU(config, spikingVector, spikingTransitionMatrix_2D)
         } else {
             config = getConfigCPU(config, spikingVector, spikingTransitionMatrix)
         }

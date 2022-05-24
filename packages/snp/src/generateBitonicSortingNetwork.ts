@@ -25,7 +25,7 @@ export const generateBitonicSortingNetwork = async () => {
     let configurationVector: SNP.Config = []
     let spikingVector: SNP.SpikingVector = []
     let synapseMatrix: SNP.SynapseMatrix = []
-    const spikingTransitionMatrix: number[][] = []
+    const spikingTransitionMatrix_2D: number[][] = []
     const ruleExpVector: [number, RegExp][] = []
 
     let n = prompt("Please enter how many input for bitonic sort (must be power of 2)") as string;
@@ -56,7 +56,7 @@ export const generateBitonicSortingNetwork = async () => {
 
     // populate rule vector
     for (let i = 0; i < numOfRules; i++) {
-        spikingTransitionMatrix.push(Array(numOfNeurons))
+        spikingTransitionMatrix_2D.push(Array(numOfNeurons))
     }
 
     //ruleExpVector = Array(numOfRules)
@@ -68,11 +68,11 @@ export const generateBitonicSortingNetwork = async () => {
         let ruleNeuronIndex: number = parseInt(tempRule[0])
         for (let j = 0; j < numOfNeurons; j++) {
             if (ruleNeuronIndex === j) {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = -parseInt(tempRule[2])
+                spikingTransitionMatrix_2D[i - indexOfFirstRule][j] = -parseInt(tempRule[2])
             } else if (synapseMatrix[ruleNeuronIndex][j] !== -1) {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = parseInt(tempRule[3])
+                spikingTransitionMatrix_2D[i - indexOfFirstRule][j] = parseInt(tempRule[3])
             } else {
-                spikingTransitionMatrix[i - indexOfFirstRule][j] = 0
+                spikingTransitionMatrix_2D[i - indexOfFirstRule][j] = 0
             }
         }
     }
@@ -91,5 +91,13 @@ export const generateBitonicSortingNetwork = async () => {
     // console.log(spikingTransitionMatrix)
 
     spikingVector = generateSpikingVector(configurationVector, ruleExpVector)
-    return { configurationVector, ruleExpVector, spikingTransitionMatrix, spikingVector }
+
+    let spikingTransitionMatrix:number[] = []
+
+    for(let i = 0; i < spikingTransitionMatrix_2D.length; i++)
+    {
+        spikingTransitionMatrix = spikingTransitionMatrix.concat(spikingTransitionMatrix_2D[i]);
+    }
+
+    return { configurationVector, ruleExpVector, spikingTransitionMatrix, spikingTransitionMatrix_2D, spikingVector }
 }

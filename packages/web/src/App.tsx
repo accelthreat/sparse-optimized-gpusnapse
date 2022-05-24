@@ -2,24 +2,16 @@ import { generateBitonicSortingNetwork, generateBitonicSortingNetworkOptimized, 
 import { getFinalConfig_nd} from '../../snp/src/getFinalConfig'
 import { getFinalConfigOptimized_nd} from '../../snp/src/getFinalConfigOptimized'
 import React, { useEffect } from 'react'
-import { genMatrix } from '../../benchmarks/src'
-
-//const setup = genMatrix(2)
 
 const log = (name: string, fn: Function) => {
   const t0 = performance.now()
-  //console.log(fn())
-  fn()
+  console.log(fn())
   const t1 = performance.now()
   console.log(`Call to ${name} took ${t1 - t0} milliseconds.`)
 }
 
 function App () {
   useEffect(() => {
-    // const spikingVectors = generateSpikingVectors(setup.c, setup.rules)
-    // log('cpu', () => getConfigCPU(setup.c, spikingVectors, setup.m))
-    // log('gpu', () => getConfigGPU(setup.c, spikingVectors, setup.m))
-
     // ** for deterministic (not Optimized)
     const logMatrix = async () => {
       let c = await generateBitonicSortingNetwork()
@@ -27,15 +19,12 @@ function App () {
       console.log("config start")
       console.log("Configuration Vector: ", c.configurationVector)
       console.log("RuleExp Vector: ", c.ruleExpVector)
-      console.log("Spiking Transition Matrix: ", c.spikingTransitionMatrix)
+      console.log("Spiking Transition Matrix: ", c.spikingTransitionMatrix_2D)
       console.log("Spiking Vector: ", c.spikingVector)
       console.log("config end")
       
-
-      log('cpu', () => getConfigCPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
-      log('gpu', () => getConfigGPU(c.configurationVector, c.spikingVector, c.spikingTransitionMatrix))
-      log('cpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, false))
-      log('gpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix))
+      log('cpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, [],  false))
+      log('gpuFinal', () => getFinalConfig(c.configurationVector, c.ruleExpVector, [], c.spikingTransitionMatrix_2D))
     }
 
     // ** for non-deterministic (not Optimized)
@@ -86,7 +75,8 @@ function App () {
       log('gpu', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
     }
 
-    logMatrix_nd()
+    //logMatrix_nd()
+    logMatrix()
   }, [])
 
   return (
