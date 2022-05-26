@@ -38,8 +38,6 @@ export const generateSpikingMatrix_Sparse = (configurationVector: SNP.Config, ne
       start = end
     }
   
-    console.log("rule Numbers")
-    console.log(ruleNumbers)
     //console.log("app" + applicabilityVector)
     //console.log("count" + countVector)
     

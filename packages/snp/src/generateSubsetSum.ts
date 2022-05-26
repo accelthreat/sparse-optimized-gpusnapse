@@ -96,8 +96,6 @@ export const generateSubsetSum = async () => {
     {
         spikingTransitionMatrix = spikingTransitionMatrix.concat(spikingTransitionMatrix_2D[i]);
     }
-    console.log("spikeTM 1D")
-    console.log(spikingTransitionMatrix)
 
     // **added May 22
     spikingMatrix = generateSpikingMatrix(configurationVector, ruleExpVector)

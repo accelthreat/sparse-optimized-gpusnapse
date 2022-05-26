@@ -31,7 +31,7 @@ export const generateSubsetSumOptimized = async () => {
     const PAD = -1
   
     //const response = await fetch("src/data/bitonic" + n + "_cuda.txt")      // uncomment
-    const response = await fetch("src/data/nd_nu_subset_"+ n + ".txt")        // added for nondet
+    const response = await fetch("src/data/subsetsum_"+ n + ".txt")        // added for nondet
     
     const text = await response.text()
     let lines = text.split('\n');

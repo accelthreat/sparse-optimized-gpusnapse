@@ -5,7 +5,8 @@ import React, { useEffect } from 'react'
 
 const log = (name: string, fn: Function) => {
   const t0 = performance.now()
-  console.log(fn())
+  // console.log(fn())
+  fn()
   const t1 = performance.now()
   console.log(`Call to ${name} took ${t1 - t0} milliseconds.`)
 }
@@ -39,7 +40,7 @@ function App () {
       // console.log("config end")
       
 
-      log('cpu', () => getConfigCPU_nd(c.configurationVector, c.spikingMatrix[0], c.spikingTransitionMatrix))
+      //log('cpu', () => getConfigCPU_nd(c.configurationVector, c.spikingMatrix[0], c.spikingTransitionMatrix))
       //log('gpu', () => getConfigGPU_nd(c.configurationVector, c.spikingMatrix, c.spikingTransitionMatrix))
       log('cpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, false))
       log('gpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, true))
@@ -71,12 +72,15 @@ function App () {
       // console.log("Spiking Vector: ", c.spikingVector)
       // console.log("config end")
       
-      log('cpu', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
-      log('gpu', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
+      log('cpuFinalOptimized', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
+      log('gpuFinalOptimized', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
     }
 
-    //logMatrix_nd()
-    logMatrix()
+    // call the functions here
+    // logMatrix()
+    logMatrix_nd()
+    logMatrixOptimized_nd()
+    
   }, [])
 
   return (
