@@ -44,23 +44,10 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
         for(let starting = start; starting < end; starting++){
             config = Q[starting]
             spikingMatrix = generateSpikingMatrix_Sparse(config, neuronRuleMapVector, ruleExpVector)
-            // for(let k = 0; k<spikingMatrix.length; k++){
-            //     if(isGPU) {
-            //         nextConfig = getConfigGPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
-            //         //
-            //         // break
-            //     } else {
-            //         nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
-            //     }
-            //     Q.push(nextConfig)
-            // }
-            // console.log(Q)
 
             if(isGPU){
                 Q = Q.concat(getConfigGPUOptimized_nd(config, spikingMatrix, ruleVector, synapseMatrix))
-                // console.log(Q)
-                //
-                // break
+
             }else{
                 for(let k = 0; k<spikingMatrix.length; k++){
                   nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
@@ -69,8 +56,7 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
                 }
             }
         }
-        //
-        // break
+
         start = end
         end = Q.length
     
