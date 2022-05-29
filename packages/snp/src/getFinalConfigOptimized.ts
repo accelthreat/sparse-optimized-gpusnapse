@@ -23,7 +23,7 @@ export function getFinalConfigOptimized(initialConfig: SNP.Config, neuronRuleMap
 
     while (iter < maxRuns && isComputationNotDone(spikingVector)) {
         if (isGPU) {
-            config = getConfigGPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
+            //config = getConfigGPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
         } else {
             config = getConfigCPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
         }
@@ -42,17 +42,35 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
     let start = 0, end = Q.length, nextConfig
     while(iter < 5){
         for(let starting = start; starting < end; starting++){
-        config = Q[starting]
-        spikingMatrix = generateSpikingMatrix_Sparse(config, neuronRuleMapVector, ruleExpVector)
-        for(let k = 0; k<spikingMatrix.length; k++){
-            if(isGPU) {
-            nextConfig = getConfigGPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
-            } else {
-            nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+            config = Q[starting]
+            spikingMatrix = generateSpikingMatrix_Sparse(config, neuronRuleMapVector, ruleExpVector)
+            // for(let k = 0; k<spikingMatrix.length; k++){
+            //     if(isGPU) {
+            //         nextConfig = getConfigGPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+            //         //
+            //         // break
+            //     } else {
+            //         nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+            //     }
+            //     Q.push(nextConfig)
+            // }
+            // console.log(Q)
+
+            if(isGPU){
+                Q = Q.concat(getConfigGPUOptimized(config, spikingMatrix, ruleVector, synapseMatrix))
+                // console.log(Q)
+                //
+                // break
+            }else{
+                for(let k = 0; k<spikingMatrix.length; k++){
+                  nextConfig = getConfigCPUOptimized(config, spikingMatrix[k], ruleVector, synapseMatrix)
+    
+                  Q.push(nextConfig)
+                }
             }
-            Q.push(nextConfig)
         }
-        }
+        //
+        // break
         start = end
         end = Q.length
     
@@ -62,5 +80,6 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
     // for(let j = start; j<end; j++){
     //     console.log("C4: " + Q[j])
     // }
+
     return Q
 }

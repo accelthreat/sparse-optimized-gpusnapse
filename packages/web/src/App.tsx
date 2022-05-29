@@ -13,6 +13,7 @@ const log = (name: string, fn: Function) => {
 
 function App () {
   useEffect(() => {
+    
     // ** for deterministic (not Optimized)
     const logMatrix = async () => {
       let c = await generateBitonicSortingNetwork()
@@ -79,7 +80,7 @@ function App () {
     // call the functions here
     // logMatrix()
     logMatrix_nd()
-    // logMatrixOptimized_nd()
+    logMatrixOptimized_nd()
     
   }, [])
 
