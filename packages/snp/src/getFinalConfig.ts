@@ -45,7 +45,7 @@ export function getFinalConfig_nd(config: any, ruleExpVector: [number, RegExp][]
         config = Q[starting]
         spikingMatrix = generateSpikingMatrix(config, ruleExpVector)
         if(isGPU){
-            Q = Q.concat(getConfigGPU_nd(config, spikingMatrix, spikingTransitionMatrix))
+            Q = Q.concat(getConfigGPU_nd(config, spikingMatrix, spikingTransitionMatrix_2D))
         }else{
             for(let k = 0; k<spikingMatrix.length; k++){
               nextConfig = getConfigCPU_nd(config, spikingMatrix[k], spikingTransitionMatrix)
@@ -61,9 +61,9 @@ export function getFinalConfig_nd(config: any, ruleExpVector: [number, RegExp][]
       iter++
     }
   
-    for(let j = start; j<end; j++){
-      console.log("C4: " + Q[j])
-    }
+    // for(let j = start; j<end; j++){
+    //   console.log("C4: " + Q[j])
+    // }
 
     return Q
 }

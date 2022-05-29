@@ -19,4 +19,8 @@ export function getConfigGPU_nd (
     }
     return sum;
   }).setOutput([width, s.length])
+
+  const result = multiplyMatrix(c, s, m, height) as number[][]
+
+  return result
 }

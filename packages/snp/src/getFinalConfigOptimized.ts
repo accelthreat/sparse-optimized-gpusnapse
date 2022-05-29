@@ -59,7 +59,8 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
         iter++
     }
     
-    for(let j = start; j<end; j++){
-        console.log("C4: " + Q[j])
-    }
+    // for(let j = start; j<end; j++){
+    //     console.log("C4: " + Q[j])
+    // }
+    return Q
 }

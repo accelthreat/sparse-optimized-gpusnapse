@@ -42,7 +42,7 @@ function App () {
 
       //log('cpu', () => getConfigCPU_nd(c.configurationVector, c.spikingMatrix[0], c.spikingTransitionMatrix))
       //log('gpu', () => getConfigGPU_nd(c.configurationVector, c.spikingMatrix, c.spikingTransitionMatrix))
-      log('cpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, [], false))
+      // log('cpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, [], false))
       log('gpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, [], c.spikingTransitionMatrix_2D, true))
     }
 
@@ -72,14 +72,14 @@ function App () {
       // console.log("Spiking Vector: ", c.spikingVector)
       // console.log("config end")
       
-      log('cpuFinalOptimized', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
+      // log('cpuFinalOptimized', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix, false))
       log('gpuFinalOptimized', () => getFinalConfigOptimized_nd(c.configurationVector, c.neuronRuleMapVector, c.ruleExpVector, c.ruleVector, c.synapseMatrix))
     }
 
     // call the functions here
     // logMatrix()
     logMatrix_nd()
-    logMatrixOptimized_nd()
+    // logMatrixOptimized_nd()
     
   }, [])
 
