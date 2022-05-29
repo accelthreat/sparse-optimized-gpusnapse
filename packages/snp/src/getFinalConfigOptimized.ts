@@ -23,7 +23,7 @@ export function getFinalConfigOptimized(initialConfig: SNP.Config, neuronRuleMap
 
     while (iter < maxRuns && isComputationNotDone(spikingVector)) {
         if (isGPU) {
-            //config = getConfigGPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
+            config = getConfigGPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
         } else {
             config = getConfigCPUOptimized(config, spikingVector, ruleVector, synapseMatrix)
         }
