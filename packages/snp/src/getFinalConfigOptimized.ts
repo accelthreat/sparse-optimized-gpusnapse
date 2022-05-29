@@ -1,7 +1,7 @@
 import { SNP } from "./types";
 import { PAD } from './constants'
 import { generateOptimizedSpikingVector } from "./generateOptimizedSpikingVector";
-import { getConfigGPUOptimized } from "./getConfigGPUOptimized";
+import { getConfigGPUOptimized, getConfigGPUOptimized_nd } from "./getConfigGPUOptimized";
 import { getConfigCPUOptimized } from "./getConfigCPUOptimized";
 import { generateSpikingMatrix_Sparse } from "./generateSpikingMatrix_Sparse";
 
@@ -57,7 +57,7 @@ export function getFinalConfigOptimized_nd(config: SNP.Config, neuronRuleMapVect
             // console.log(Q)
 
             if(isGPU){
-                Q = Q.concat(getConfigGPUOptimized(config, spikingMatrix, ruleVector, synapseMatrix))
+                Q = Q.concat(getConfigGPUOptimized_nd(config, spikingMatrix, ruleVector, synapseMatrix))
                 // console.log(Q)
                 //
                 // break
