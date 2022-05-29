@@ -42,8 +42,8 @@ function App () {
 
       //log('cpu', () => getConfigCPU_nd(c.configurationVector, c.spikingMatrix[0], c.spikingTransitionMatrix))
       //log('gpu', () => getConfigGPU_nd(c.configurationVector, c.spikingMatrix, c.spikingTransitionMatrix))
-      log('cpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, false))
-      log('gpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, true))
+      log('cpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, c.spikingTransitionMatrix, [], false))
+      log('gpuFinal', () => getFinalConfig_nd(c.configurationVector, c.ruleExpVector, [], c.spikingTransitionMatrix_2D, true))
     }
 
     // ** for deterministic (Optimized)

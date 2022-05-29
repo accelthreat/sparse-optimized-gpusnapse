@@ -34,7 +34,7 @@ export function getFinalConfig(initialConfig: SNP.Config, ruleExpVector: [number
 }
 
 
-export function getFinalConfig_nd(config: any, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[], isGPU: boolean = true) {
+export function getFinalConfig_nd(config: any, ruleExpVector: [number, RegExp][], spikingTransitionMatrix: number[] = [], spikingTransitionMatrix_2D: SNP.SpikingTransitionMatrix = [], isGPU: boolean = true) {
     let iter = 0, spikingMatrix
   
     let Q = []
