@@ -4,7 +4,7 @@ Optimized Sparse GPUSnapse is an extension of [GPUSnapse](https://github.com/Sec
 
 # Prerequisites
 npm <em>(installation guide [here](https://phoenixnap.com/kb/install-node-js-npm-on-windows))</em> <br>
-yarn <em>(instalation guide [here](https://yarnpkg.com/getting-started/migration))</em>
+yarn <em>(instalation guide [here](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable))</em>
 
 # Installation
 <strong>1. </strong> Fork the repository <br>
